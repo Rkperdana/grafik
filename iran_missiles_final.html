@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Peta Jangkauan Rudal Iran</title>
+    <style>
+        body { margin:0; padding:0; font-family:Arial, sans-serif; background:#f5f5f5; }
+        .header { text-align:center; padding:20px 10px 10px; background:white; border-bottom:2px solid #eee; }
+        .logo { max-height:60px; margin-bottom:10px; }
+        .judul { font-size:32px; font-weight:bold; margin:5px 0; }
+        .tanggal { font-size:18px; color:#666; margin-bottom:10px; }
+        .map-container { width:100%; height:calc(100vh - 220px); min-height:500px; position:relative; }
+        .footer { text-align:center; padding:15px; background:white; border-top:2px solid #eee; font-size:14px; color:#555; }
+        .footer .sumber { font-weight:bold; }
+        .footer .kredit { margin-top:5px; font-style:italic; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="data:image/png;base64,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" alt="Datalndonesia.id" style="max-height:60px;">
+
+        </div>
+        <div class="judul">Sistem Rudal Iran dan Jangkauan Maksimalnya</div>
+        <div class="tanggal">(25 Februari 2026)</div>
+    </div>
+    <div class="map-container">
+        <!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_1ac2c8d20340579c8569187fc9e9fb0f {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.css"/>
+</head>
+<body>
+    
+    
+<div style="position:fixed; bottom:50px; left:50px; width:260px; max-height:400px; overflow-y:auto;
+            border:2px solid grey; z-index:9999; font-size:12px; background:white; padding:10px;
+            border-radius:5px; opacity:0.9; box-shadow:2px 2px 10px rgba(0,0,0,0.3);">
+    <b style="font-size:14px;">🇮🇷 Jangkauan Rudal Iran</b><br>
+    <hr style="margin:5px 0;">
+    <i style="background:darkred; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Soumar (2500 km)<br><i style="background:red; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Khorramshahr (2000 km)<br><i style="background:orange; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Ghadr (2000 km)<br><i style="background:gold; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Sejjil (2000 km)<br><i style="background:yellow; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Emad (1700 km)<br><i style="background:lightgreen; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Kheibarshekan (1450 km)<br><i style="background:green; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Shahab 3 (1300 km)<br><i style="background:cyan; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Qadr-380* (1000 km)<br><i style="background:blue; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Qiam-1 (800 km)<br><i style="background:purple; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Ya-Ali (700 km)<br><i style="background:pink; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Zolfaghar (700 km)<br><i style="background:brown; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Quds-1 (600 km)<br><i style="background:gray; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Raad-500 (500 km)<br><i style="background:darkblue; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Shahab 2 (500 km)<br><i style="background:darkgreen; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Fateh-313 (500 km)<br><i style="background:darkorange; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Shahab 1 (300 km)<br><i style="background:black; width:12px; height:12px; display:inline-block; border-radius:50%;"></i> Fateh-110 (300 km)<br>
+    <hr style="margin:5px 0;">
+    <span style="font-size:10px; color:gray;">Gunakan layer control (kanan atas) untuk memilih rudal.</span>
+</div>
+    
+            <div class="folium-map" id="map_1ac2c8d20340579c8569187fc9e9fb0f" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_1ac2c8d20340579c8569187fc9e9fb0f = L.map(
+                "map_1ac2c8d20340579c8569187fc9e9fb0f",
+                {
+                    center: [35.6892, 51.389],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 3,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+
+            
+
+        
+    
+            var tile_layer_4ecb538cbcef83b68b0ef5a1d280d42f = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_4ecb538cbcef83b68b0ef5a1d280d42f.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var marker_1127b96143798b64d515c0200289d606 = L.marker(
+                [35.6892, 51.389],
+                {
+}
+            ).addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var icon_f353c64c20d8c0b464c710a39b4863d2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0e11565fc3db5c83ffc6ea27358ca732 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_419993621e2a6b09a60df01a589b8fcc = $(`<div id="html_419993621e2a6b09a60df01a589b8fcc" style="width: 100.0%; height: 100.0%;">Teheran</div>`)[0];
+                popup_0e11565fc3db5c83ffc6ea27358ca732.setContent(html_419993621e2a6b09a60df01a589b8fcc);
+            
+        
+
+        marker_1127b96143798b64d515c0200289d606.bindPopup(popup_0e11565fc3db5c83ffc6ea27358ca732)
+        ;
+
+        
+    
+    
+                marker_1127b96143798b64d515c0200289d606.setIcon(icon_f353c64c20d8c0b464c710a39b4863d2);
+            
+    
+            var feature_group_861fe9112eb20fc05431f46e8a7940bf = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_01cedeee5474ef335787821cf6fd94df = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_861fe9112eb20fc05431f46e8a7940bf);
+        
+    
+        var popup_de227c9b570b0c2566c6a258b4323048 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_96f99adde1c83fb9fd308d88d62977e6 = $(`<div id="html_96f99adde1c83fb9fd308d88d62977e6" style="width: 100.0%; height: 100.0%;">Soumar: 2500 km</div>`)[0];
+                popup_de227c9b570b0c2566c6a258b4323048.setContent(html_96f99adde1c83fb9fd308d88d62977e6);
+            
+        
+
+        circle_01cedeee5474ef335787821cf6fd94df.bindPopup(popup_de227c9b570b0c2566c6a258b4323048)
+        ;
+
+        
+    
+    
+            feature_group_861fe9112eb20fc05431f46e8a7940bf.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_adb316510f9660125ac1023fbcd9bf6c = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_efef5ebb63c8dc1c7ecfe9ea09136d92 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_adb316510f9660125ac1023fbcd9bf6c);
+        
+    
+        var popup_166206edc7847c6244b785efd8cc14fb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8b32aee7d3ad29d7ae473d8143d0af25 = $(`<div id="html_8b32aee7d3ad29d7ae473d8143d0af25" style="width: 100.0%; height: 100.0%;">Khorramshahr: 2000 km</div>`)[0];
+                popup_166206edc7847c6244b785efd8cc14fb.setContent(html_8b32aee7d3ad29d7ae473d8143d0af25);
+            
+        
+
+        circle_efef5ebb63c8dc1c7ecfe9ea09136d92.bindPopup(popup_166206edc7847c6244b785efd8cc14fb)
+        ;
+
+        
+    
+    
+            feature_group_adb316510f9660125ac1023fbcd9bf6c.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_5caaa41588970442a3eaa642480f97a8 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_e0545283a9eefe7da13ab2b31a9064ec = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_5caaa41588970442a3eaa642480f97a8);
+        
+    
+        var popup_13544ba9dbaad5ae5485a43ed5a9bdb3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_44c8bf32a1e0124f2b7880208610aa96 = $(`<div id="html_44c8bf32a1e0124f2b7880208610aa96" style="width: 100.0%; height: 100.0%;">Ghadr: 2000 km</div>`)[0];
+                popup_13544ba9dbaad5ae5485a43ed5a9bdb3.setContent(html_44c8bf32a1e0124f2b7880208610aa96);
+            
+        
+
+        circle_e0545283a9eefe7da13ab2b31a9064ec.bindPopup(popup_13544ba9dbaad5ae5485a43ed5a9bdb3)
+        ;
+
+        
+    
+    
+            feature_group_5caaa41588970442a3eaa642480f97a8.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_8447b28b5c57edd779acd6135d7b4725 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_3ba4132425d272171b5525ff967fbc67 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "gold", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gold", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_8447b28b5c57edd779acd6135d7b4725);
+        
+    
+        var popup_6e9b352ee80d5b9838fe3dfba77d24ab = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_005a021cf311044e5911a631147bf954 = $(`<div id="html_005a021cf311044e5911a631147bf954" style="width: 100.0%; height: 100.0%;">Sejjil: 2000 km</div>`)[0];
+                popup_6e9b352ee80d5b9838fe3dfba77d24ab.setContent(html_005a021cf311044e5911a631147bf954);
+            
+        
+
+        circle_3ba4132425d272171b5525ff967fbc67.bindPopup(popup_6e9b352ee80d5b9838fe3dfba77d24ab)
+        ;
+
+        
+    
+    
+            feature_group_8447b28b5c57edd779acd6135d7b4725.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_0ef6c93a7f6270fe463742a2434cd100 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_45cf1a7a0edc365629ca81e58a07d338 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 1700000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_0ef6c93a7f6270fe463742a2434cd100);
+        
+    
+        var popup_773b6a863ffb314f9ff4e336ff8ad056 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8ad5702cbe2a7247f56280b49045b2ea = $(`<div id="html_8ad5702cbe2a7247f56280b49045b2ea" style="width: 100.0%; height: 100.0%;">Emad: 1700 km</div>`)[0];
+                popup_773b6a863ffb314f9ff4e336ff8ad056.setContent(html_8ad5702cbe2a7247f56280b49045b2ea);
+            
+        
+
+        circle_45cf1a7a0edc365629ca81e58a07d338.bindPopup(popup_773b6a863ffb314f9ff4e336ff8ad056)
+        ;
+
+        
+    
+    
+            feature_group_0ef6c93a7f6270fe463742a2434cd100.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_aa6f3d88b804be78f6307c821bd1ad8f = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_8a85cb3824c6327ebbaa3a8d5eab4f9a = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "lightgreen", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lightgreen", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 1450000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_aa6f3d88b804be78f6307c821bd1ad8f);
+        
+    
+        var popup_9be003f2b5a32f62029385ca9986230b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6ee66ce8b7461cb2d3197fca0431843c = $(`<div id="html_6ee66ce8b7461cb2d3197fca0431843c" style="width: 100.0%; height: 100.0%;">Kheibarshekan: 1450 km</div>`)[0];
+                popup_9be003f2b5a32f62029385ca9986230b.setContent(html_6ee66ce8b7461cb2d3197fca0431843c);
+            
+        
+
+        circle_8a85cb3824c6327ebbaa3a8d5eab4f9a.bindPopup(popup_9be003f2b5a32f62029385ca9986230b)
+        ;
+
+        
+    
+    
+            feature_group_aa6f3d88b804be78f6307c821bd1ad8f.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_66b25de4c4a867ef4e4951c16db315e7 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_8bde4a4454e46d86cb361aae9c251010 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 1300000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_66b25de4c4a867ef4e4951c16db315e7);
+        
+    
+        var popup_5742a6ef993d5119e35a9ad4115763ea = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9785450ac3ec940d5a91aa2f316a323d = $(`<div id="html_9785450ac3ec940d5a91aa2f316a323d" style="width: 100.0%; height: 100.0%;">Shahab 3: 1300 km</div>`)[0];
+                popup_5742a6ef993d5119e35a9ad4115763ea.setContent(html_9785450ac3ec940d5a91aa2f316a323d);
+            
+        
+
+        circle_8bde4a4454e46d86cb361aae9c251010.bindPopup(popup_5742a6ef993d5119e35a9ad4115763ea)
+        ;
+
+        
+    
+    
+            feature_group_66b25de4c4a867ef4e4951c16db315e7.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_1ade72f966f5109bd3eb25790a94bd56 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_5c1ffc521fcbbdb3ba5328e2d63f8938 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "cyan", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "cyan", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 1000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_1ade72f966f5109bd3eb25790a94bd56);
+        
+    
+        var popup_7ef40c92af6b545788509e6088260e89 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_09a46447a6c38d9ea1ec8d556e842d26 = $(`<div id="html_09a46447a6c38d9ea1ec8d556e842d26" style="width: 100.0%; height: 100.0%;">Qadr-380*: 1000 km</div>`)[0];
+                popup_7ef40c92af6b545788509e6088260e89.setContent(html_09a46447a6c38d9ea1ec8d556e842d26);
+            
+        
+
+        circle_5c1ffc521fcbbdb3ba5328e2d63f8938.bindPopup(popup_7ef40c92af6b545788509e6088260e89)
+        ;
+
+        
+    
+    
+            feature_group_1ade72f966f5109bd3eb25790a94bd56.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_d51286c1459a4d5b0b6e435a29510211 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_e10652e2c44ab524ce335528571c9886 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 800000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_d51286c1459a4d5b0b6e435a29510211);
+        
+    
+        var popup_4f06d6d885ceab996eaee1cb1e4456c1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8a9290db1957e86a267343eb89f7dcb9 = $(`<div id="html_8a9290db1957e86a267343eb89f7dcb9" style="width: 100.0%; height: 100.0%;">Qiam-1: 800 km</div>`)[0];
+                popup_4f06d6d885ceab996eaee1cb1e4456c1.setContent(html_8a9290db1957e86a267343eb89f7dcb9);
+            
+        
+
+        circle_e10652e2c44ab524ce335528571c9886.bindPopup(popup_4f06d6d885ceab996eaee1cb1e4456c1)
+        ;
+
+        
+    
+    
+            feature_group_d51286c1459a4d5b0b6e435a29510211.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_8574e85596d21f0218fdb4e4654b6f59 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_f98a729eeda2401a2a941480d8a6ad10 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 700000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_8574e85596d21f0218fdb4e4654b6f59);
+        
+    
+        var popup_bd5bfb79ed40204a0aef1249dee533f2 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_15b8dbcca52f5c47666e6ede443fb888 = $(`<div id="html_15b8dbcca52f5c47666e6ede443fb888" style="width: 100.0%; height: 100.0%;">Ya-Ali: 700 km</div>`)[0];
+                popup_bd5bfb79ed40204a0aef1249dee533f2.setContent(html_15b8dbcca52f5c47666e6ede443fb888);
+            
+        
+
+        circle_f98a729eeda2401a2a941480d8a6ad10.bindPopup(popup_bd5bfb79ed40204a0aef1249dee533f2)
+        ;
+
+        
+    
+    
+            feature_group_8574e85596d21f0218fdb4e4654b6f59.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_992246b32eaece64dc2f010129f91194 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_f333dcf3bd73aa2658aa04fca578e040 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "pink", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "pink", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 700000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_992246b32eaece64dc2f010129f91194);
+        
+    
+        var popup_64c3f448d7050740f64ba5e2885d6e28 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c19053cb132fb26f4c37312290045d47 = $(`<div id="html_c19053cb132fb26f4c37312290045d47" style="width: 100.0%; height: 100.0%;">Zolfaghar: 700 km</div>`)[0];
+                popup_64c3f448d7050740f64ba5e2885d6e28.setContent(html_c19053cb132fb26f4c37312290045d47);
+            
+        
+
+        circle_f333dcf3bd73aa2658aa04fca578e040.bindPopup(popup_64c3f448d7050740f64ba5e2885d6e28)
+        ;
+
+        
+    
+    
+            feature_group_992246b32eaece64dc2f010129f91194.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_5b38f1f651ca9bdcb9dd44fdc3c37bc4 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_4e2178854b64de637e94281383e627b7 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "brown", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "brown", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 600000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_5b38f1f651ca9bdcb9dd44fdc3c37bc4);
+        
+    
+        var popup_6ba76dc64621d7370e3f9581e103acf5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9b26cefd082fe5393892a9bb947a088b = $(`<div id="html_9b26cefd082fe5393892a9bb947a088b" style="width: 100.0%; height: 100.0%;">Quds-1: 600 km</div>`)[0];
+                popup_6ba76dc64621d7370e3f9581e103acf5.setContent(html_9b26cefd082fe5393892a9bb947a088b);
+            
+        
+
+        circle_4e2178854b64de637e94281383e627b7.bindPopup(popup_6ba76dc64621d7370e3f9581e103acf5)
+        ;
+
+        
+    
+    
+            feature_group_5b38f1f651ca9bdcb9dd44fdc3c37bc4.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_7a16b5d21628aa12d67f1b99c98d3fa3 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_bb3e7571bad816038b25fbc9702ac162 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_7a16b5d21628aa12d67f1b99c98d3fa3);
+        
+    
+        var popup_0b51fea8d38627cefbe9d1d401ba42b4 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a5e526f2eebbbd4f537b612db55763f1 = $(`<div id="html_a5e526f2eebbbd4f537b612db55763f1" style="width: 100.0%; height: 100.0%;">Raad-500: 500 km</div>`)[0];
+                popup_0b51fea8d38627cefbe9d1d401ba42b4.setContent(html_a5e526f2eebbbd4f537b612db55763f1);
+            
+        
+
+        circle_bb3e7571bad816038b25fbc9702ac162.bindPopup(popup_0b51fea8d38627cefbe9d1d401ba42b4)
+        ;
+
+        
+    
+    
+            feature_group_7a16b5d21628aa12d67f1b99c98d3fa3.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_fef5bf4c5a82f6ddb76925d8fc386992 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_42f9a4aa6c086d541a65b0716107cc48 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "darkblue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkblue", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_fef5bf4c5a82f6ddb76925d8fc386992);
+        
+    
+        var popup_67cbe2fa2aea890951485024d9d46e0f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4e0501b0d757cb684d8e649af374fd9a = $(`<div id="html_4e0501b0d757cb684d8e649af374fd9a" style="width: 100.0%; height: 100.0%;">Shahab 2: 500 km</div>`)[0];
+                popup_67cbe2fa2aea890951485024d9d46e0f.setContent(html_4e0501b0d757cb684d8e649af374fd9a);
+            
+        
+
+        circle_42f9a4aa6c086d541a65b0716107cc48.bindPopup(popup_67cbe2fa2aea890951485024d9d46e0f)
+        ;
+
+        
+    
+    
+            feature_group_fef5bf4c5a82f6ddb76925d8fc386992.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_3bc49c2450fb0ea88e70a5e43a0d1a05 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_d766f71c8fdc4913bc9bf21b1c15d54e = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "darkgreen", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkgreen", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_3bc49c2450fb0ea88e70a5e43a0d1a05);
+        
+    
+        var popup_27740aa5a03c655f7ee8032cdc2f72b0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_84c149c84d0568a516bd6e5e80eff1b7 = $(`<div id="html_84c149c84d0568a516bd6e5e80eff1b7" style="width: 100.0%; height: 100.0%;">Fateh-313: 500 km</div>`)[0];
+                popup_27740aa5a03c655f7ee8032cdc2f72b0.setContent(html_84c149c84d0568a516bd6e5e80eff1b7);
+            
+        
+
+        circle_d766f71c8fdc4913bc9bf21b1c15d54e.bindPopup(popup_27740aa5a03c655f7ee8032cdc2f72b0)
+        ;
+
+        
+    
+    
+            feature_group_3bc49c2450fb0ea88e70a5e43a0d1a05.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_b831abeecefae2b9a454e4ccd23b7aa3 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_ae387fe202ed23b8de771762dddc152a = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "darkorange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkorange", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 300000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_b831abeecefae2b9a454e4ccd23b7aa3);
+        
+    
+        var popup_8fbf3ba648752ce7aba2dadc0b949c81 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f2d553417082c8a5bc99456b59044e56 = $(`<div id="html_f2d553417082c8a5bc99456b59044e56" style="width: 100.0%; height: 100.0%;">Shahab 1: 300 km</div>`)[0];
+                popup_8fbf3ba648752ce7aba2dadc0b949c81.setContent(html_f2d553417082c8a5bc99456b59044e56);
+            
+        
+
+        circle_ae387fe202ed23b8de771762dddc152a.bindPopup(popup_8fbf3ba648752ce7aba2dadc0b949c81)
+        ;
+
+        
+    
+    
+            feature_group_b831abeecefae2b9a454e4ccd23b7aa3.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var feature_group_36c34fc9f83472b3679094e82178a25c = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_7742e8055cca827838efc01cf44cd0e4 = L.circle(
+                [35.6892, 51.389],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 300000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_36c34fc9f83472b3679094e82178a25c);
+        
+    
+        var popup_e76042967bcda4ac6eac0b7d482f4be5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e85ff6f1fe670fa82bead430f6367c5e = $(`<div id="html_e85ff6f1fe670fa82bead430f6367c5e" style="width: 100.0%; height: 100.0%;">Fateh-110: 300 km</div>`)[0];
+                popup_e76042967bcda4ac6eac0b7d482f4be5.setContent(html_e85ff6f1fe670fa82bead430f6367c5e);
+            
+        
+
+        circle_7742e8055cca827838efc01cf44cd0e4.bindPopup(popup_e76042967bcda4ac6eac0b7d482f4be5)
+        ;
+
+        
+    
+    
+            feature_group_36c34fc9f83472b3679094e82178a25c.addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+    
+            var layer_control_0953264a7f00c4b3e82057b5ad3a57f4_layers = {
+                base_layers : {
+                    "Layer Kontrol" : tile_layer_4ecb538cbcef83b68b0ef5a1d280d42f,
+                },
+                overlays :  {
+                    "Soumar (2500 km)" : feature_group_861fe9112eb20fc05431f46e8a7940bf,
+                    "Khorramshahr (2000 km)" : feature_group_adb316510f9660125ac1023fbcd9bf6c,
+                    "Ghadr (2000 km)" : feature_group_5caaa41588970442a3eaa642480f97a8,
+                    "Sejjil (2000 km)" : feature_group_8447b28b5c57edd779acd6135d7b4725,
+                    "Emad (1700 km)" : feature_group_0ef6c93a7f6270fe463742a2434cd100,
+                    "Kheibarshekan (1450 km)" : feature_group_aa6f3d88b804be78f6307c821bd1ad8f,
+                    "Shahab 3 (1300 km)" : feature_group_66b25de4c4a867ef4e4951c16db315e7,
+                    "Qadr-380* (1000 km)" : feature_group_1ade72f966f5109bd3eb25790a94bd56,
+                    "Qiam-1 (800 km)" : feature_group_d51286c1459a4d5b0b6e435a29510211,
+                    "Ya-Ali (700 km)" : feature_group_8574e85596d21f0218fdb4e4654b6f59,
+                    "Zolfaghar (700 km)" : feature_group_992246b32eaece64dc2f010129f91194,
+                    "Quds-1 (600 km)" : feature_group_5b38f1f651ca9bdcb9dd44fdc3c37bc4,
+                    "Raad-500 (500 km)" : feature_group_7a16b5d21628aa12d67f1b99c98d3fa3,
+                    "Shahab 2 (500 km)" : feature_group_fef5bf4c5a82f6ddb76925d8fc386992,
+                    "Fateh-313 (500 km)" : feature_group_3bc49c2450fb0ea88e70a5e43a0d1a05,
+                    "Shahab 1 (300 km)" : feature_group_b831abeecefae2b9a454e4ccd23b7aa3,
+                    "Fateh-110 (300 km)" : feature_group_36c34fc9f83472b3679094e82178a25c,
+                },
+            };
+            let layer_control_0953264a7f00c4b3e82057b5ad3a57f4 = L.control.layers(
+                layer_control_0953264a7f00c4b3e82057b5ad3a57f4_layers.base_layers,
+                layer_control_0953264a7f00c4b3e82057b5ad3a57f4_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+
+        
+    
+            L.control.fullscreen(
+                {
+  "position": "topleft",
+  "title": "Full Screen",
+  "titleCancel": "Exit Full Screen",
+  "forceSeparateButton": false,
+}
+            ).addTo(map_1ac2c8d20340579c8569187fc9e9fb0f);
+        
+</script>
+</html>
+    </div>
+    <div class="footer">
+        <div class="sumber">Sumber: Al Jazeera, CSIS Missile Defense Project</div>
+        <div class="kredit">Visualisasi Oleh: Ridha Kusuma Perdana</div>
+    </div>
+</body>
+</html>
