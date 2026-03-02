@@ -1,0 +1,532 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Peta Jangkauan Rudal Israel</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 10px 10px 10px;
+            background: white;
+            border-bottom: 2px solid #eee;
+        }
+        .logo {
+            max-height: 60px;
+            margin-bottom: 10px;
+        }
+        .judul {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .tanggal {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .map-container {
+            width: 100%;
+            height: calc(100vh - 220px);
+            min-height: 500px;
+            position: relative;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-top: 2px solid #eee;
+            font-size: 14px;
+            color: #555;
+        }
+        .footer .sumber {
+            font-weight: bold;
+        }
+        .footer .kredit {
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="data:image/png;base64,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" alt="Datalndonesia.id" style="max-height:60px;">
+
+        </div>
+        <div class="judul">8 Sistem Rudal Israel dan Jangkauan Maksimalnya</div>
+        <div class="tanggal">(16 Juni 2025)</div>
+    </div>
+
+    <div class="map-container">
+        <!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_4f319d7aa9516d808196d2201ed4ae0e {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.css"/>
+</head>
+<body>
+    
+    
+<div style="position: fixed; 
+            bottom: 50px; left: 50px; width: 240px; height: auto; 
+            border:2px solid grey; z-index:9999; font-size:14px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            opacity: 0.9;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);">
+    <b style="font-size:16px;">🇮🇱 Jangkauan Rudal Israel</b><br>
+    <hr style="margin:5px 0;">
+    <i style="background: darkred; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Jericho 3 (6500 km)<br>
+    <i style="background: red; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Jericho 2 (3500 km)<br>
+    <i style="background: orange; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Gabriel (400 km)<br>
+    <i style="background: gold; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Delilah (300 km)<br>
+    <i style="background: yellow; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> LORA (280 km)<br>
+    <i style="background: lightgreen; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Popeye Turbo (200 km)<br>
+    <i style="background: green; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> EXTRA (150 km)<br>
+    <i style="background: blue; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Popeye (100 km)<br>
+    <hr style="margin:5px 0;">
+    <span style="font-size:12px; color:gray;">Gunakan layer control (kanan atas) untuk memilih rudal.</span>
+</div>
+    
+            <div class="folium-map" id="map_4f319d7aa9516d808196d2201ed4ae0e" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_4f319d7aa9516d808196d2201ed4ae0e = L.map(
+                "map_4f319d7aa9516d808196d2201ed4ae0e",
+                {
+                    center: [32.0853, 34.7818],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 2,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+
+            
+
+        
+    
+            var tile_layer_a3f308244dbbf60c9a2cc05486b50a33 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_a3f308244dbbf60c9a2cc05486b50a33.addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var marker_9ea7826a66faa26ae6067851f95bcd08 = L.marker(
+                [32.0853, 34.7818],
+                {
+}
+            ).addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var icon_e2322f9594a834e443cc6b97f4875550 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_74e3a38aab5d32718e93b5acd1d3c57d = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_22a1f3ce2d056a2ad063ed1fb5c8e554 = $(`<div id="html_22a1f3ce2d056a2ad063ed1fb5c8e554" style="width: 100.0%; height: 100.0%;">Tel Aviv</div>`)[0];
+                popup_74e3a38aab5d32718e93b5acd1d3c57d.setContent(html_22a1f3ce2d056a2ad063ed1fb5c8e554);
+            
+        
+
+        marker_9ea7826a66faa26ae6067851f95bcd08.bindPopup(popup_74e3a38aab5d32718e93b5acd1d3c57d)
+        ;
+
+        
+    
+    
+                marker_9ea7826a66faa26ae6067851f95bcd08.setIcon(icon_e2322f9594a834e443cc6b97f4875550);
+            
+    
+            var feature_group_66e7a06ee5780866fcaa0c292dc4d7c4 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_4faaedc8cd189864a45de81081f16777 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_66e7a06ee5780866fcaa0c292dc4d7c4);
+        
+    
+        var popup_2a9ff1ac222b909c46aa5aec39333e5f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_955e8dd7f89963780880261c16beceec = $(`<div id="html_955e8dd7f89963780880261c16beceec" style="width: 100.0%; height: 100.0%;">Jericho 3: 6500 km</div>`)[0];
+                popup_2a9ff1ac222b909c46aa5aec39333e5f.setContent(html_955e8dd7f89963780880261c16beceec);
+            
+        
+
+        circle_4faaedc8cd189864a45de81081f16777.bindPopup(popup_2a9ff1ac222b909c46aa5aec39333e5f)
+        ;
+
+        
+    
+    
+            feature_group_66e7a06ee5780866fcaa0c292dc4d7c4.addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var feature_group_6c0e41015c521843969689815896e84d = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_1fd6208607b9b6fabf2a9909f933d459 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 3500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_6c0e41015c521843969689815896e84d);
+        
+    
+        var popup_85d30c7a7afdb3bac12f7c489612e9aa = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e668928fbc1d2a1dfed66c94b7f0a861 = $(`<div id="html_e668928fbc1d2a1dfed66c94b7f0a861" style="width: 100.0%; height: 100.0%;">Jericho 2: 3500 km</div>`)[0];
+                popup_85d30c7a7afdb3bac12f7c489612e9aa.setContent(html_e668928fbc1d2a1dfed66c94b7f0a861);
+            
+        
+
+        circle_1fd6208607b9b6fabf2a9909f933d459.bindPopup(popup_85d30c7a7afdb3bac12f7c489612e9aa)
+        ;
+
+        
+    
+    
+            feature_group_6c0e41015c521843969689815896e84d.addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var feature_group_ccdbede11a356ecec8479cda3fd9a74b = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_551008369d25221bd2b9bc02085d9860 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 400000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_ccdbede11a356ecec8479cda3fd9a74b);
+        
+    
+        var popup_0e079c78e24d6bdad952f965c531750c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0718240de77c592987f419455d0f3e2b = $(`<div id="html_0718240de77c592987f419455d0f3e2b" style="width: 100.0%; height: 100.0%;">Gabriel: 400 km</div>`)[0];
+                popup_0e079c78e24d6bdad952f965c531750c.setContent(html_0718240de77c592987f419455d0f3e2b);
+            
+        
+
+        circle_551008369d25221bd2b9bc02085d9860.bindPopup(popup_0e079c78e24d6bdad952f965c531750c)
+        ;
+
+        
+    
+    
+            feature_group_ccdbede11a356ecec8479cda3fd9a74b.addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var feature_group_03ee10ba7cab518197f3752ac3351b89 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_4976d17f8627691a6ae5e89c7d6fd2ce = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "gold", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gold", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 300000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_03ee10ba7cab518197f3752ac3351b89);
+        
+    
+        var popup_e9c5e8987a698acb32d6f9efb6a511ef = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3c9bd21990504ff78595dad23442263b = $(`<div id="html_3c9bd21990504ff78595dad23442263b" style="width: 100.0%; height: 100.0%;">Delilah: 300 km</div>`)[0];
+                popup_e9c5e8987a698acb32d6f9efb6a511ef.setContent(html_3c9bd21990504ff78595dad23442263b);
+            
+        
+
+        circle_4976d17f8627691a6ae5e89c7d6fd2ce.bindPopup(popup_e9c5e8987a698acb32d6f9efb6a511ef)
+        ;
+
+        
+    
+    
+            feature_group_03ee10ba7cab518197f3752ac3351b89.addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var feature_group_2ef324279f8d78ae8947009f0af8a7ee = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_39a546c3a9e363333c10864ccf7c7d35 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 280000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_2ef324279f8d78ae8947009f0af8a7ee);
+        
+    
+        var popup_7a2899f31f000e12d24659809accb1b1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_894a01923a544569ab4c7bf9d0b9ac16 = $(`<div id="html_894a01923a544569ab4c7bf9d0b9ac16" style="width: 100.0%; height: 100.0%;">LORA: 280 km</div>`)[0];
+                popup_7a2899f31f000e12d24659809accb1b1.setContent(html_894a01923a544569ab4c7bf9d0b9ac16);
+            
+        
+
+        circle_39a546c3a9e363333c10864ccf7c7d35.bindPopup(popup_7a2899f31f000e12d24659809accb1b1)
+        ;
+
+        
+    
+    
+            feature_group_2ef324279f8d78ae8947009f0af8a7ee.addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var feature_group_824dbc42e42078627da555eb7e1983cc = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_e7dfe0d6c17358b6d5b46ba74d790b9b = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "lightgreen", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lightgreen", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 200000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_824dbc42e42078627da555eb7e1983cc);
+        
+    
+        var popup_9eb2a05258d001609d477e545a674443 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b3a959602901d4b47b7a7a684f89915b = $(`<div id="html_b3a959602901d4b47b7a7a684f89915b" style="width: 100.0%; height: 100.0%;">Popeye Turbo: 200 km</div>`)[0];
+                popup_9eb2a05258d001609d477e545a674443.setContent(html_b3a959602901d4b47b7a7a684f89915b);
+            
+        
+
+        circle_e7dfe0d6c17358b6d5b46ba74d790b9b.bindPopup(popup_9eb2a05258d001609d477e545a674443)
+        ;
+
+        
+    
+    
+            feature_group_824dbc42e42078627da555eb7e1983cc.addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var feature_group_aae718226371f1b1cd9be14cba8f6a3c = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_a5017a42c4cd1f2ba77f8c59eba37ebb = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 150000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_aae718226371f1b1cd9be14cba8f6a3c);
+        
+    
+        var popup_eed22f8092907c415a59143480762c53 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d3b97a0e348cf3913571a9661699b885 = $(`<div id="html_d3b97a0e348cf3913571a9661699b885" style="width: 100.0%; height: 100.0%;">EXTRA: 150 km</div>`)[0];
+                popup_eed22f8092907c415a59143480762c53.setContent(html_d3b97a0e348cf3913571a9661699b885);
+            
+        
+
+        circle_a5017a42c4cd1f2ba77f8c59eba37ebb.bindPopup(popup_eed22f8092907c415a59143480762c53)
+        ;
+
+        
+    
+    
+            feature_group_aae718226371f1b1cd9be14cba8f6a3c.addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var feature_group_2235c9786a62680464a1275e507411d3 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_865d6dc68089abb42f92b4cf60528679 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 100000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_2235c9786a62680464a1275e507411d3);
+        
+    
+        var popup_8852d84239d9bc275020b584634d111f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_824e00353965b2bae5839e1ac782509c = $(`<div id="html_824e00353965b2bae5839e1ac782509c" style="width: 100.0%; height: 100.0%;">Popeye: 100 km</div>`)[0];
+                popup_8852d84239d9bc275020b584634d111f.setContent(html_824e00353965b2bae5839e1ac782509c);
+            
+        
+
+        circle_865d6dc68089abb42f92b4cf60528679.bindPopup(popup_8852d84239d9bc275020b584634d111f)
+        ;
+
+        
+    
+    
+            feature_group_2235c9786a62680464a1275e507411d3.addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+    
+            var layer_control_30d4e9038aa73d811f65ad35cb5eef57_layers = {
+                base_layers : {
+                    "Layer Kontrol" : tile_layer_a3f308244dbbf60c9a2cc05486b50a33,
+                },
+                overlays :  {
+                    "Jericho 3 (6500 km)" : feature_group_66e7a06ee5780866fcaa0c292dc4d7c4,
+                    "Jericho 2 (3500 km)" : feature_group_6c0e41015c521843969689815896e84d,
+                    "Gabriel (400 km)" : feature_group_ccdbede11a356ecec8479cda3fd9a74b,
+                    "Delilah (300 km)" : feature_group_03ee10ba7cab518197f3752ac3351b89,
+                    "LORA (280 km)" : feature_group_2ef324279f8d78ae8947009f0af8a7ee,
+                    "Popeye Turbo (200 km)" : feature_group_824dbc42e42078627da555eb7e1983cc,
+                    "EXTRA (150 km)" : feature_group_aae718226371f1b1cd9be14cba8f6a3c,
+                    "Popeye (100 km)" : feature_group_2235c9786a62680464a1275e507411d3,
+                },
+            };
+            let layer_control_30d4e9038aa73d811f65ad35cb5eef57 = L.control.layers(
+                layer_control_30d4e9038aa73d811f65ad35cb5eef57_layers.base_layers,
+                layer_control_30d4e9038aa73d811f65ad35cb5eef57_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+
+        
+    
+            L.control.fullscreen(
+                {
+  "position": "topleft",
+  "title": "Full Screen",
+  "titleCancel": "Exit Full Screen",
+  "forceSeparateButton": false,
+}
+            ).addTo(map_4f319d7aa9516d808196d2201ed4ae0e);
+        
+</script>
+</html>
+    </div>
+
+    <div class="footer">
+        <div class="sumber">Sumber: Al Jazeera. CSIS Defends Missile Project</div>
+        <div class="kredit">Visualisasi Oleh: Ridha Kusuma Perdana</div>
+    </div>
+</body>
+</html>
