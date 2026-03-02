@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_de49330cb9c542405e685638b175e710 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.css"/>
+</head>
+<body>
+    
+    
+<div style="position: fixed; 
+            bottom: 50px; left: 50px; width: 220px; height: auto; 
+            border:2px solid grey; z-index:9999; font-size:14px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            opacity: 0.9;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);">
+    <b style="font-size:16px;">🇮🇱 Jangkauan Rudal Israel</b><br>
+    <hr style="margin:5px 0;">
+    <i style="background: darkred; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Jericho 3 (6500 km)<br>
+    <i style="background: red; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Jericho 2 (3500 km)<br>
+    <i style="background: orange; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Gabriel (400 km)<br>
+    <i style="background: gold; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Delilah (300 km)<br>
+    <i style="background: yellow; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> LORA (280 km)<br>
+    <i style="background: lightgreen; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Popeye Turbo (200 km)<br>
+    <i style="background: green; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> EXTRA (150 km)<br>
+    <i style="background: blue; width: 12px; height: 12px; display: inline-block; border-radius: 50%;"></i> Popeye (100 km)<br>
+    <hr style="margin:5px 0;">
+    <span style="font-size:12px; color:gray;">Gunakan layer control (kanan atas) untuk memilih rudal.</span>
+</div>
+    
+            <div class="folium-map" id="map_de49330cb9c542405e685638b175e710" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_de49330cb9c542405e685638b175e710 = L.map(
+                "map_de49330cb9c542405e685638b175e710",
+                {
+                    center: [32.0853, 34.7818],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 2,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_4e245bdc237275f432fc8b2e5f2df197 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_4e245bdc237275f432fc8b2e5f2df197.addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var marker_877daef55fd11039850a44f775898036 = L.marker(
+                [32.0853, 34.7818],
+                {
+}
+            ).addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var icon_4defbc4b4ba471810dc59bcefdcacdec = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_47fad9a2f493d36204dc930ac9a5d137 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_280c566e60898e11a3a3777f57b11149 = $(`<div id="html_280c566e60898e11a3a3777f57b11149" style="width: 100.0%; height: 100.0%;">Tel Aviv</div>`)[0];
+                popup_47fad9a2f493d36204dc930ac9a5d137.setContent(html_280c566e60898e11a3a3777f57b11149);
+            
+        
+
+        marker_877daef55fd11039850a44f775898036.bindPopup(popup_47fad9a2f493d36204dc930ac9a5d137)
+        ;
+
+        
+    
+    
+                marker_877daef55fd11039850a44f775898036.setIcon(icon_4defbc4b4ba471810dc59bcefdcacdec);
+            
+    
+            var feature_group_5b83d58480447b064ba0f065ebc72822 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_d1561a91d2ec30abec4e352ded7d4e39 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "darkred", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_5b83d58480447b064ba0f065ebc72822);
+        
+    
+        var popup_3b1c23e78e95175bf2702f0785eec6f5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0579e74e2f3fe103c409a9281c09afe1 = $(`<div id="html_0579e74e2f3fe103c409a9281c09afe1" style="width: 100.0%; height: 100.0%;">Jericho 3: 6500 km</div>`)[0];
+                popup_3b1c23e78e95175bf2702f0785eec6f5.setContent(html_0579e74e2f3fe103c409a9281c09afe1);
+            
+        
+
+        circle_d1561a91d2ec30abec4e352ded7d4e39.bindPopup(popup_3b1c23e78e95175bf2702f0785eec6f5)
+        ;
+
+        
+    
+    
+            feature_group_5b83d58480447b064ba0f065ebc72822.addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var feature_group_cfe808027c6b270f120ab9f41d57541b = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_1b0239e26244ba4ac208023831d1a7bc = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 3500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_cfe808027c6b270f120ab9f41d57541b);
+        
+    
+        var popup_7706889ec776eeee452cb1416334046b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d14cef03092f63d441fa9f497a283193 = $(`<div id="html_d14cef03092f63d441fa9f497a283193" style="width: 100.0%; height: 100.0%;">Jericho 2: 3500 km</div>`)[0];
+                popup_7706889ec776eeee452cb1416334046b.setContent(html_d14cef03092f63d441fa9f497a283193);
+            
+        
+
+        circle_1b0239e26244ba4ac208023831d1a7bc.bindPopup(popup_7706889ec776eeee452cb1416334046b)
+        ;
+
+        
+    
+    
+            feature_group_cfe808027c6b270f120ab9f41d57541b.addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var feature_group_90252fc732316311cc8d18489eb17bf7 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_af6ac052c891036f35f8a78ebe9e9aed = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 400000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_90252fc732316311cc8d18489eb17bf7);
+        
+    
+        var popup_fddcceb30bb2dfc5daad099e42b73de6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5a8b7b9915b8b201d80bfbadb5490192 = $(`<div id="html_5a8b7b9915b8b201d80bfbadb5490192" style="width: 100.0%; height: 100.0%;">Gabriel: 400 km</div>`)[0];
+                popup_fddcceb30bb2dfc5daad099e42b73de6.setContent(html_5a8b7b9915b8b201d80bfbadb5490192);
+            
+        
+
+        circle_af6ac052c891036f35f8a78ebe9e9aed.bindPopup(popup_fddcceb30bb2dfc5daad099e42b73de6)
+        ;
+
+        
+    
+    
+            feature_group_90252fc732316311cc8d18489eb17bf7.addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var feature_group_5711796a3f288d08d07d15759320af87 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_f95dd45877073706d0074f18aa9bb3e5 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "gold", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gold", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 300000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_5711796a3f288d08d07d15759320af87);
+        
+    
+        var popup_9408758657eb6bd1dcc2122a21ecf473 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_83fa9b80f45e8022d6cbdc09319d068e = $(`<div id="html_83fa9b80f45e8022d6cbdc09319d068e" style="width: 100.0%; height: 100.0%;">Delilah: 300 km</div>`)[0];
+                popup_9408758657eb6bd1dcc2122a21ecf473.setContent(html_83fa9b80f45e8022d6cbdc09319d068e);
+            
+        
+
+        circle_f95dd45877073706d0074f18aa9bb3e5.bindPopup(popup_9408758657eb6bd1dcc2122a21ecf473)
+        ;
+
+        
+    
+    
+            feature_group_5711796a3f288d08d07d15759320af87.addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var feature_group_85ff58d1999eee9349fd988d6a50ddc8 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_2a6213d5acc0fee1b47e66d0b26ef409 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 280000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_85ff58d1999eee9349fd988d6a50ddc8);
+        
+    
+        var popup_2bd096a21f589e755b2e0e29b5348d40 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_052bb1a1b44e0f13c2eb7a02c8a3c75d = $(`<div id="html_052bb1a1b44e0f13c2eb7a02c8a3c75d" style="width: 100.0%; height: 100.0%;">LORA: 280 km</div>`)[0];
+                popup_2bd096a21f589e755b2e0e29b5348d40.setContent(html_052bb1a1b44e0f13c2eb7a02c8a3c75d);
+            
+        
+
+        circle_2a6213d5acc0fee1b47e66d0b26ef409.bindPopup(popup_2bd096a21f589e755b2e0e29b5348d40)
+        ;
+
+        
+    
+    
+            feature_group_85ff58d1999eee9349fd988d6a50ddc8.addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var feature_group_4281f9e2c76fb2424a06d51b52a3481e = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_b9e42dfbe16aafd9f2ab57c7e8e8d1ac = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "lightgreen", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "lightgreen", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 200000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_4281f9e2c76fb2424a06d51b52a3481e);
+        
+    
+        var popup_14837d5e0429a4a0b2c2388f4f06df2a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5eecf9dc566c8bbe64cd2c8ae4b5aacd = $(`<div id="html_5eecf9dc566c8bbe64cd2c8ae4b5aacd" style="width: 100.0%; height: 100.0%;">Popeye Turbo: 200 km</div>`)[0];
+                popup_14837d5e0429a4a0b2c2388f4f06df2a.setContent(html_5eecf9dc566c8bbe64cd2c8ae4b5aacd);
+            
+        
+
+        circle_b9e42dfbe16aafd9f2ab57c7e8e8d1ac.bindPopup(popup_14837d5e0429a4a0b2c2388f4f06df2a)
+        ;
+
+        
+    
+    
+            feature_group_4281f9e2c76fb2424a06d51b52a3481e.addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var feature_group_64bdaed0b389592113a7ced29589697d = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_d12ce2f15f1fccbd9098b922be55c8c4 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 150000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_64bdaed0b389592113a7ced29589697d);
+        
+    
+        var popup_a64d205cd6714d63473a22803ffed8a5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_94c1a44c04fc3c7a4bb11934f3378962 = $(`<div id="html_94c1a44c04fc3c7a4bb11934f3378962" style="width: 100.0%; height: 100.0%;">EXTRA: 150 km</div>`)[0];
+                popup_a64d205cd6714d63473a22803ffed8a5.setContent(html_94c1a44c04fc3c7a4bb11934f3378962);
+            
+        
+
+        circle_d12ce2f15f1fccbd9098b922be55c8c4.bindPopup(popup_a64d205cd6714d63473a22803ffed8a5)
+        ;
+
+        
+    
+    
+            feature_group_64bdaed0b389592113a7ced29589697d.addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var feature_group_efe6c4f18be35586b6c8ae89cb7409b8 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_f80a8b133bd8c574923d2732bca3d6b2 = L.circle(
+                [32.0853, 34.7818],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 100000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_efe6c4f18be35586b6c8ae89cb7409b8);
+        
+    
+        var popup_914da7be4810d1112e3e48ae117295c3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_64c9d88955ed04113543f633bc98846a = $(`<div id="html_64c9d88955ed04113543f633bc98846a" style="width: 100.0%; height: 100.0%;">Popeye: 100 km</div>`)[0];
+                popup_914da7be4810d1112e3e48ae117295c3.setContent(html_64c9d88955ed04113543f633bc98846a);
+            
+        
+
+        circle_f80a8b133bd8c574923d2732bca3d6b2.bindPopup(popup_914da7be4810d1112e3e48ae117295c3)
+        ;
+
+        
+    
+    
+            feature_group_efe6c4f18be35586b6c8ae89cb7409b8.addTo(map_de49330cb9c542405e685638b175e710);
+        
+    
+            var layer_control_197eaa2f83a1fbdb443a4dba524d583f_layers = {
+                base_layers : {
+                    "cartodbpositron" : tile_layer_4e245bdc237275f432fc8b2e5f2df197,
+                },
+                overlays :  {
+                    "Jericho 3 (6500 km)" : feature_group_5b83d58480447b064ba0f065ebc72822,
+                    "Jericho 2 (3500 km)" : feature_group_cfe808027c6b270f120ab9f41d57541b,
+                    "Gabriel (400 km)" : feature_group_90252fc732316311cc8d18489eb17bf7,
+                    "Delilah (300 km)" : feature_group_5711796a3f288d08d07d15759320af87,
+                    "LORA (280 km)" : feature_group_85ff58d1999eee9349fd988d6a50ddc8,
+                    "Popeye Turbo (200 km)" : feature_group_4281f9e2c76fb2424a06d51b52a3481e,
+                    "EXTRA (150 km)" : feature_group_64bdaed0b389592113a7ced29589697d,
+                    "Popeye (100 km)" : feature_group_efe6c4f18be35586b6c8ae89cb7409b8,
+                },
+            };
+            let layer_control_197eaa2f83a1fbdb443a4dba524d583f = L.control.layers(
+                layer_control_197eaa2f83a1fbdb443a4dba524d583f_layers.base_layers,
+                layer_control_197eaa2f83a1fbdb443a4dba524d583f_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_de49330cb9c542405e685638b175e710);
+
+        
+    
+            L.control.fullscreen(
+                {
+  "position": "topleft",
+  "title": "Full Screen",
+  "titleCancel": "Exit Full Screen",
+  "forceSeparateButton": false,
+}
+            ).addTo(map_de49330cb9c542405e685638b175e710);
+        
+</script>
+</html>
