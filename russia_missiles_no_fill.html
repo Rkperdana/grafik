@@ -1,0 +1,1291 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Peta Jangkauan Rudal Rusia</title>
+    <!-- Google Fonts: Source Sans Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { margin:0; padding:0; font-family: 'Source Sans Pro', sans-serif; background:#f5f5f5; }
+        .header { text-align:center; padding:20px 10px 10px; background:white; border-bottom:2px solid #eee; }
+        .logo { max-height:60px; margin-bottom:10px; }
+        .judul { font-size:32px; font-weight:bold; margin:5px 0; }
+        .tanggal { font-size:18px; color:#666; margin-bottom:10px; }
+        .map-container { width:100%; height:calc(100vh - 220px); min-height:500px; position:relative; }
+        .footer { text-align:center; padding:15px; background:white; border-top:2px solid #eee; font-size:14px; color:#555; }
+        .footer .sumber { font-weight:bold; }
+        .footer .kredit { margin-top:5px; font-style:italic; }
+
+        /* Sembunyikan LayerControl (tetap ada di DOM, tapi tidak terlihat) */
+        .leaflet-control-layers {
+            display: none !important;
+        }
+
+        /* Responsif untuk layar kecil */
+        @media (max-width: 768px) {
+            #legend-container {
+                width: 200px !important;
+                font-size: 11px !important;
+                bottom: 20px !important;
+                left: 10px !important;
+                padding: 8px !important;
+                max-height: 300px !important;
+            }
+            #legend-container b {
+                font-size: 12px !important;
+            }
+            #legend-container span {
+                font-size: 9px !important;
+            }
+            .judul {
+                font-size: 24px !important;
+            }
+            .tanggal {
+                font-size: 16px !important;
+            }
+            #show-legend-btn {
+                bottom: 10px !important;
+                left: 10px !important;
+                padding: 6px 10px !important;
+                font-size: 12px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            #legend-container {
+                width: 160px !important;
+                left: 5px !important;
+                bottom: 10px !important;
+                max-height: 250px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="data:image/png;base64,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" alt="Datalndonesia.id" style="max-height:60px;">
+
+        </div>
+        <div class="judul">Daftar Sistem Rudal Rusia dan Jangkauan Maksimalnya</div>
+        <div class="tanggal">(9 Januari 2026)</div>
+    </div>
+    <div class="map-container">
+        <!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_703b8a99891f3e412f2b1272784bcde6 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.css"/>
+</head>
+<body>
+    
+    
+<div id="legend-container" style="position:fixed; bottom:50px; left:50px; width:280px; max-height:400px; overflow-y:auto;
+            border:2px solid grey; z-index:9999; font-size:12px; background:white; padding:10px;
+            border-radius:5px; opacity:0.9; box-shadow:2px 2px 10px rgba(0,0,0,0.3);">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <b style="font-size:14px;">🇷🇺 Jangkauan Rudal Rusia (klik item untuk toggle)</b>
+        <button id="close-legend" style="background:none; border:none; font-size:18px; cursor:pointer; font-weight:bold;">&times;</button>
+    </div>
+    <hr style="margin:5px 0;">
+    
+    <div class="legend-item" data-layer-name="R-36 (SS-18 Satan) (16000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:darkred; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">R-36 (SS-18 Satan) (16000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Topol (SS-25 Sickle) (11000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:red; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Topol (SS-25 Sickle) (11000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Shtil (SS-N-23 Skiff) (11000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:orange; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Shtil (SS-N-23 Skiff) (11000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Topol-M (SS-27 Mod 1) (11000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:gold; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Topol-M (SS-27 Mod 1) (11000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="UR-100 (SS-19 Stiletto) (10000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:yellow; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">UR-100 (SS-19 Stiletto) (10000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="RS-24 Yars (SS-27 Mod 2) (10500 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:lightgreen; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">RS-24 Yars (SS-27 Mod 2) (10500 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="RS-28 Sarmat (10000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:green; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">RS-28 Sarmat (10000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Bulava (SS-N-32) (8300 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:cyan; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Bulava (SS-N-32) (8300 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="R-29 Vysota (SS-N-18 Stingray) (6500 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:blue; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">R-29 Vysota (SS-N-18 Stingray) (6500 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Avangard (6000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:purple; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Avangard (6000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="RS-26 Rubezh (5800 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:pink; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">RS-26 Rubezh (5800 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Oreshnik (5470 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:brown; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Oreshnik (5470 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Pioneer (SS-20 Saber) (5000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:gray; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Pioneer (SS-20 Saber) (5000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Zyb (SS-N-6 Serb) (3200 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:darkblue; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Zyb (SS-N-6 Serb) (3200 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Granat (SS-N-21 Sampson) (3000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:darkgreen; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Granat (SS-N-21 Sampson) (3000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Kh-101 / Kh-102 (2800 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:darkorange; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Kh-101 / Kh-102 (2800 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Kalibr (SS-N-30A) (2500 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:black; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Kalibr (SS-N-30A) (2500 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="9M729 (SSC-8) (2500 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:cadetblue; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">9M729 (SSC-8) (2500 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Kh-55 (AS-15 Kent) (2500 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:lightred; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Kh-55 (AS-15 Kent) (2500 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Kh-47M2 Kinzhal (2000 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:beige; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Kh-47M2 Kinzhal (2000 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="R-11 (SS-1 Scud) (550 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:lightgray; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">R-11 (SS-1 Scud) (550 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="Iskander (SS-26 Stone) (500 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:darkpurple; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">Iskander (SS-26 Stone) (500 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="3M-54 Kalibr/Club (SS-N-27 Sizzler) (300 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:lightblue; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">3M-54 Kalibr/Club (SS-N-27 Sizzler) (300 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="P-800 Oniks/Yakhont/Bastion (SS-N-26 “Strobile”) (300 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:olive; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">P-800 Oniks/Yakhont/Bastion (SS-N-26 “Strobile”) (300 km)</span>
+    </div>
+    
+    <div class="legend-item" data-layer-name="OTR-21 Tochka (SS-21 Scarab) (120 km)" style="cursor:pointer; margin-bottom:4px; display:flex; align-items:center;">
+        <i style="background:maroon; width:12px; height:12px; display:inline-block; border-radius:50%; margin-right:6px;"></i>
+        <span style="flex:1;">OTR-21 Tochka (SS-21 Scarab) (120 km)</span>
+    </div>
+    
+    <hr style="margin:5px 0;">
+    <span style="font-size:10px; color:gray;">Klik item legenda untuk menampilkan/menyembunyikan lapisan.</span>
+</div>
+<div id="show-legend-btn" style="position:fixed; bottom:20px; left:20px; z-index:9998; background:white; border:2px solid grey; border-radius:5px; padding:8px 12px; font-size:14px; cursor:pointer; box-shadow:2px 2px 5px rgba(0,0,0,0.2); display:none;">
+    📋 Legend
+</div>
+<script>
+    // Tombol tutup/munculkan legenda
+    var legend = document.getElementById('legend-container');
+    var closeBtn = document.getElementById('close-legend');
+    var showBtn = document.getElementById('show-legend-btn');
+
+    closeBtn.addEventListener('click', function() {
+        legend.style.display = 'none';
+        showBtn.style.display = 'block';
+    });
+
+    showBtn.addEventListener('click', function() {
+        legend.style.display = 'block';
+        showBtn.style.display = 'none';
+    });
+
+    // Fungsi untuk mendapatkan checkbox berdasarkan nama layer
+    function getCheckboxByLayerName(name) {
+        var labels = document.querySelectorAll('.leaflet-control-layers-overlays label');
+        for (var i = 0; i < labels.length; i++) {
+            var label = labels[i];
+            if (label.textContent.trim() === name) {
+                return label.querySelector('input[type="checkbox"]');
+            }
+        }
+        return null;
+    }
+
+    // Fungsi untuk memperbarui gaya item legenda berdasarkan status checkbox
+    function updateLegendItemFromCheckbox(name) {
+        var checkbox = getCheckboxByLayerName(name);
+        var item = document.querySelector(`.legend-item[data-layer-name="${name}"]`);
+        if (item && checkbox) {
+            item.style.opacity = checkbox.checked ? '1' : '0.5';
+            item.style.fontWeight = checkbox.checked ? 'normal' : 'lighter';
+        }
+    }
+
+    // Inisialisasi gaya awal dan pasang listener
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            var items = document.querySelectorAll('.legend-item');
+            items.forEach(function(item) {
+                var name = item.dataset.layerName;
+                updateLegendItemFromCheckbox(name);
+            });
+
+            var checkboxes = document.querySelectorAll('.leaflet-control-layers-overlays input[type="checkbox"]');
+            checkboxes.forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    var label = this.closest('label');
+                    if (label) {
+                        var name = label.textContent.trim();
+                        updateLegendItemFromCheckbox(name);
+                    }
+                });
+            });
+
+            items.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var name = this.dataset.layerName;
+                    var checkbox = getCheckboxByLayerName(name);
+                    if (checkbox) {
+                        checkbox.click();
+                        updateLegendItemFromCheckbox(name);
+                    }
+                });
+            });
+        }, 500);
+    });
+</script>
+    
+            <div class="folium-map" id="map_703b8a99891f3e412f2b1272784bcde6" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_703b8a99891f3e412f2b1272784bcde6 = L.map(
+                "map_703b8a99891f3e412f2b1272784bcde6",
+                {
+                    center: [55.7558, 37.6173],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 3,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_703b8a99891f3e412f2b1272784bcde6);
+
+            
+
+        
+    
+            var tile_layer_2f9a53b874544ce0b3fd6c215aec88c6 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_2f9a53b874544ce0b3fd6c215aec88c6.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var marker_8e70cb0edffc4f6d65eccc92e297f062 = L.marker(
+                [55.7558, 37.6173],
+                {
+}
+            ).addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var icon_b2edd54542a818c71aceb160051e0a1d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_47315fc9812cca0e2283d9a3b9027612 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_edd461a163243ba5864b70ab37b5b5c2 = $(`<div id="html_edd461a163243ba5864b70ab37b5b5c2" style="width: 100.0%; height: 100.0%;">Moskow</div>`)[0];
+                popup_47315fc9812cca0e2283d9a3b9027612.setContent(html_edd461a163243ba5864b70ab37b5b5c2);
+            
+        
+
+        marker_8e70cb0edffc4f6d65eccc92e297f062.bindPopup(popup_47315fc9812cca0e2283d9a3b9027612)
+        ;
+
+        
+    
+    
+                marker_8e70cb0edffc4f6d65eccc92e297f062.setIcon(icon_b2edd54542a818c71aceb160051e0a1d);
+            
+    
+            var feature_group_8904e31bec26bb3b0eda7eda3e58dc3e = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_0fc4d150c6558f9a95775ba6b740d14a = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "darkred", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "darkred", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 16000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_8904e31bec26bb3b0eda7eda3e58dc3e);
+        
+    
+        var popup_8e65c0f0084ff34ee1dbff55c820d39e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ca7d696d7109fc2eb6aed948e2b5afaa = $(`<div id="html_ca7d696d7109fc2eb6aed948e2b5afaa" style="width: 100.0%; height: 100.0%;">R-36 (SS-18 Satan): 16000 km</div>`)[0];
+                popup_8e65c0f0084ff34ee1dbff55c820d39e.setContent(html_ca7d696d7109fc2eb6aed948e2b5afaa);
+            
+        
+
+        circle_0fc4d150c6558f9a95775ba6b740d14a.bindPopup(popup_8e65c0f0084ff34ee1dbff55c820d39e)
+        ;
+
+        
+    
+    
+            feature_group_8904e31bec26bb3b0eda7eda3e58dc3e.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_8675c165cf199068f4ecb16b2ee4c1a2 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_f5c8e17c33b829fde1fe37327b415e2c = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_8675c165cf199068f4ecb16b2ee4c1a2);
+        
+    
+        var popup_0be133054d0a429f445c2eea072b922c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_496640192dc6536fcee8f3a4140fda2b = $(`<div id="html_496640192dc6536fcee8f3a4140fda2b" style="width: 100.0%; height: 100.0%;">Topol (SS-25 Sickle): 11000 km</div>`)[0];
+                popup_0be133054d0a429f445c2eea072b922c.setContent(html_496640192dc6536fcee8f3a4140fda2b);
+            
+        
+
+        circle_f5c8e17c33b829fde1fe37327b415e2c.bindPopup(popup_0be133054d0a429f445c2eea072b922c)
+        ;
+
+        
+    
+    
+            feature_group_8675c165cf199068f4ecb16b2ee4c1a2.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_d18be254bb4fb3e3ba47064f882bb050 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_8e4193c2b0b9d2225939c1a4c6ca1412 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_d18be254bb4fb3e3ba47064f882bb050);
+        
+    
+        var popup_5528f86ad800ae505de77e2a57bd9f53 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4eaf6a50136ee1b821ff559773386249 = $(`<div id="html_4eaf6a50136ee1b821ff559773386249" style="width: 100.0%; height: 100.0%;">Shtil (SS-N-23 Skiff): 11000 km</div>`)[0];
+                popup_5528f86ad800ae505de77e2a57bd9f53.setContent(html_4eaf6a50136ee1b821ff559773386249);
+            
+        
+
+        circle_8e4193c2b0b9d2225939c1a4c6ca1412.bindPopup(popup_5528f86ad800ae505de77e2a57bd9f53)
+        ;
+
+        
+    
+    
+            feature_group_d18be254bb4fb3e3ba47064f882bb050.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_9c6b4379bf467b7634daa7cc6de0df00 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_3c085362a989716ccba01795129c6cb0 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "gold", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "gold", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 11000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_9c6b4379bf467b7634daa7cc6de0df00);
+        
+    
+        var popup_c021d9b7bbcb80b62613301dccce91cc = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c8ac39676baf4449aa0bd403e6f11d66 = $(`<div id="html_c8ac39676baf4449aa0bd403e6f11d66" style="width: 100.0%; height: 100.0%;">Topol-M (SS-27 Mod 1): 11000 km</div>`)[0];
+                popup_c021d9b7bbcb80b62613301dccce91cc.setContent(html_c8ac39676baf4449aa0bd403e6f11d66);
+            
+        
+
+        circle_3c085362a989716ccba01795129c6cb0.bindPopup(popup_c021d9b7bbcb80b62613301dccce91cc)
+        ;
+
+        
+    
+    
+            feature_group_9c6b4379bf467b7634daa7cc6de0df00.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_0f748342408902ef5fbfd7b19f5fe242 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_58b0f7342b275119bcd2b2ec23828a8c = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "yellow", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_0f748342408902ef5fbfd7b19f5fe242);
+        
+    
+        var popup_5d8ff84397de82c8593d522b7dc23999 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f2af047cd116b528e180aee57bd87d13 = $(`<div id="html_f2af047cd116b528e180aee57bd87d13" style="width: 100.0%; height: 100.0%;">UR-100 (SS-19 Stiletto): 10000 km</div>`)[0];
+                popup_5d8ff84397de82c8593d522b7dc23999.setContent(html_f2af047cd116b528e180aee57bd87d13);
+            
+        
+
+        circle_58b0f7342b275119bcd2b2ec23828a8c.bindPopup(popup_5d8ff84397de82c8593d522b7dc23999)
+        ;
+
+        
+    
+    
+            feature_group_0f748342408902ef5fbfd7b19f5fe242.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_027ea361491135279a6ec3d02c436140 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_79211daef98191d552ce4534f701a38e = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "lightgreen", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "lightgreen", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_027ea361491135279a6ec3d02c436140);
+        
+    
+        var popup_db2d5f4047756c8a827c700ec5645311 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e14e21a79b309b97ff16dff8a5e8f1b9 = $(`<div id="html_e14e21a79b309b97ff16dff8a5e8f1b9" style="width: 100.0%; height: 100.0%;">RS-24 Yars (SS-27 Mod 2): 10500 km</div>`)[0];
+                popup_db2d5f4047756c8a827c700ec5645311.setContent(html_e14e21a79b309b97ff16dff8a5e8f1b9);
+            
+        
+
+        circle_79211daef98191d552ce4534f701a38e.bindPopup(popup_db2d5f4047756c8a827c700ec5645311)
+        ;
+
+        
+    
+    
+            feature_group_027ea361491135279a6ec3d02c436140.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_49aa3165a67a630e7bb146ad8331600c = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_c8d1f9e96db772f400376a015208040e = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "green", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_49aa3165a67a630e7bb146ad8331600c);
+        
+    
+        var popup_10f1278135181b1b9d750fb9366a2d79 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_764953c864c37076b68c93aecbe1c859 = $(`<div id="html_764953c864c37076b68c93aecbe1c859" style="width: 100.0%; height: 100.0%;">RS-28 Sarmat: 10000 km</div>`)[0];
+                popup_10f1278135181b1b9d750fb9366a2d79.setContent(html_764953c864c37076b68c93aecbe1c859);
+            
+        
+
+        circle_c8d1f9e96db772f400376a015208040e.bindPopup(popup_10f1278135181b1b9d750fb9366a2d79)
+        ;
+
+        
+    
+    
+            feature_group_49aa3165a67a630e7bb146ad8331600c.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_ebb4b0f28a4823c674291801c175d0a2 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_ef3c90c839d4772143c9eeb91587d3bb = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "cyan", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "cyan", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8300000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_ebb4b0f28a4823c674291801c175d0a2);
+        
+    
+        var popup_4ae96b53fab1304c4de8585dbe89b2e5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_37fa93c142c97d2a7edcfd2fc97740cc = $(`<div id="html_37fa93c142c97d2a7edcfd2fc97740cc" style="width: 100.0%; height: 100.0%;">Bulava (SS-N-32): 8300 km</div>`)[0];
+                popup_4ae96b53fab1304c4de8585dbe89b2e5.setContent(html_37fa93c142c97d2a7edcfd2fc97740cc);
+            
+        
+
+        circle_ef3c90c839d4772143c9eeb91587d3bb.bindPopup(popup_4ae96b53fab1304c4de8585dbe89b2e5)
+        ;
+
+        
+    
+    
+            feature_group_ebb4b0f28a4823c674291801c175d0a2.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_37a825edcae2315baf5350b0f7594354 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_510afe657cba7269c4a1362b67dddc53 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_37a825edcae2315baf5350b0f7594354);
+        
+    
+        var popup_07a8e025f21d240572dee6ebcd23c636 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_68f019a46ef2113bbdbf573b665a8c70 = $(`<div id="html_68f019a46ef2113bbdbf573b665a8c70" style="width: 100.0%; height: 100.0%;">R-29 Vysota (SS-N-18 Stingray): 6500 km</div>`)[0];
+                popup_07a8e025f21d240572dee6ebcd23c636.setContent(html_68f019a46ef2113bbdbf573b665a8c70);
+            
+        
+
+        circle_510afe657cba7269c4a1362b67dddc53.bindPopup(popup_07a8e025f21d240572dee6ebcd23c636)
+        ;
+
+        
+    
+    
+            feature_group_37a825edcae2315baf5350b0f7594354.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_7fcbc2f501b5baa30b7fbbe008b86483 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_3eb9c4b891161ae8051b9ddbb11c31a2 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_7fcbc2f501b5baa30b7fbbe008b86483);
+        
+    
+        var popup_e11038f1fc037bdeb4eda997393d03fe = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_714890dcd888f25c59d16c876b9b2b61 = $(`<div id="html_714890dcd888f25c59d16c876b9b2b61" style="width: 100.0%; height: 100.0%;">Avangard: 6000 km</div>`)[0];
+                popup_e11038f1fc037bdeb4eda997393d03fe.setContent(html_714890dcd888f25c59d16c876b9b2b61);
+            
+        
+
+        circle_3eb9c4b891161ae8051b9ddbb11c31a2.bindPopup(popup_e11038f1fc037bdeb4eda997393d03fe)
+        ;
+
+        
+    
+    
+            feature_group_7fcbc2f501b5baa30b7fbbe008b86483.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_45121f1ffba61b52eb9ffc39f2f11bb5 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_23618c699be01a78574be7af07802ac2 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "pink", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "pink", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5800000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_45121f1ffba61b52eb9ffc39f2f11bb5);
+        
+    
+        var popup_23c1dff0edf3f0de4ef4d5d419424f90 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0abf6081d23b406e719aa2ff7307006f = $(`<div id="html_0abf6081d23b406e719aa2ff7307006f" style="width: 100.0%; height: 100.0%;">RS-26 Rubezh: 5800 km</div>`)[0];
+                popup_23c1dff0edf3f0de4ef4d5d419424f90.setContent(html_0abf6081d23b406e719aa2ff7307006f);
+            
+        
+
+        circle_23618c699be01a78574be7af07802ac2.bindPopup(popup_23c1dff0edf3f0de4ef4d5d419424f90)
+        ;
+
+        
+    
+    
+            feature_group_45121f1ffba61b52eb9ffc39f2f11bb5.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_44982170c38a7f551a6e6a0d1165d5b1 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_ae78949a95b32e026b6888eb49272d65 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "brown", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "brown", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5470000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_44982170c38a7f551a6e6a0d1165d5b1);
+        
+    
+        var popup_0da99b4e54f27fe4f274f8c92879e38c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f0188f695ce99723e8dc169ad514662d = $(`<div id="html_f0188f695ce99723e8dc169ad514662d" style="width: 100.0%; height: 100.0%;">Oreshnik: 5470 km</div>`)[0];
+                popup_0da99b4e54f27fe4f274f8c92879e38c.setContent(html_f0188f695ce99723e8dc169ad514662d);
+            
+        
+
+        circle_ae78949a95b32e026b6888eb49272d65.bindPopup(popup_0da99b4e54f27fe4f274f8c92879e38c)
+        ;
+
+        
+    
+    
+            feature_group_44982170c38a7f551a6e6a0d1165d5b1.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_17d3db83d02195593a4b208ae402868a = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_e9f34a0415e7889f45664cc160004d8c = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_17d3db83d02195593a4b208ae402868a);
+        
+    
+        var popup_7d66db366797de28a0fdc74bc629a4a2 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3e494f0218edcfee786c20042804ad40 = $(`<div id="html_3e494f0218edcfee786c20042804ad40" style="width: 100.0%; height: 100.0%;">Pioneer (SS-20 Saber): 5000 km</div>`)[0];
+                popup_7d66db366797de28a0fdc74bc629a4a2.setContent(html_3e494f0218edcfee786c20042804ad40);
+            
+        
+
+        circle_e9f34a0415e7889f45664cc160004d8c.bindPopup(popup_7d66db366797de28a0fdc74bc629a4a2)
+        ;
+
+        
+    
+    
+            feature_group_17d3db83d02195593a4b208ae402868a.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_4417cad8487a1c44050c74fadf0e3f10 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_1f138ba24a2327964482ced974002730 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "darkblue", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "darkblue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 3200000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_4417cad8487a1c44050c74fadf0e3f10);
+        
+    
+        var popup_92089ab4544c75ff3826d32274632a79 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_187419ccfed5d64e8ac1c6745a1e397f = $(`<div id="html_187419ccfed5d64e8ac1c6745a1e397f" style="width: 100.0%; height: 100.0%;">Zyb (SS-N-6 Serb): 3200 km</div>`)[0];
+                popup_92089ab4544c75ff3826d32274632a79.setContent(html_187419ccfed5d64e8ac1c6745a1e397f);
+            
+        
+
+        circle_1f138ba24a2327964482ced974002730.bindPopup(popup_92089ab4544c75ff3826d32274632a79)
+        ;
+
+        
+    
+    
+            feature_group_4417cad8487a1c44050c74fadf0e3f10.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_5dbafb0290a4deab69ce6bf0ffd07fb0 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_c05735c445c39b00a60a61e025d4fb81 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "darkgreen", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "darkgreen", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 3000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_5dbafb0290a4deab69ce6bf0ffd07fb0);
+        
+    
+        var popup_30dd3a346971d4df04f0a890785eb852 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_db9f867d908955a689493b64bdf4fc06 = $(`<div id="html_db9f867d908955a689493b64bdf4fc06" style="width: 100.0%; height: 100.0%;">Granat (SS-N-21 Sampson): 3000 km</div>`)[0];
+                popup_30dd3a346971d4df04f0a890785eb852.setContent(html_db9f867d908955a689493b64bdf4fc06);
+            
+        
+
+        circle_c05735c445c39b00a60a61e025d4fb81.bindPopup(popup_30dd3a346971d4df04f0a890785eb852)
+        ;
+
+        
+    
+    
+            feature_group_5dbafb0290a4deab69ce6bf0ffd07fb0.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_9b410f92c4dddf3430760ff8917decc6 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_5a0e6770f3d874cc24f6c0f5c496f95d = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "darkorange", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "darkorange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2800000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_9b410f92c4dddf3430760ff8917decc6);
+        
+    
+        var popup_ee95e52390f2986a3ca950187aee4127 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_420ddc873e782e5d677135ef31d28035 = $(`<div id="html_420ddc873e782e5d677135ef31d28035" style="width: 100.0%; height: 100.0%;">Kh-101 / Kh-102: 2800 km</div>`)[0];
+                popup_ee95e52390f2986a3ca950187aee4127.setContent(html_420ddc873e782e5d677135ef31d28035);
+            
+        
+
+        circle_5a0e6770f3d874cc24f6c0f5c496f95d.bindPopup(popup_ee95e52390f2986a3ca950187aee4127)
+        ;
+
+        
+    
+    
+            feature_group_9b410f92c4dddf3430760ff8917decc6.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_43e3c871786490b306fa7947c1e147ba = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_2db79154cc9490f4c7c414c082ac8f1c = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "black", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_43e3c871786490b306fa7947c1e147ba);
+        
+    
+        var popup_5847d4a50b9763854fa398c12eca6d27 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e58c2d07e6f30047b94e4866277e5fb6 = $(`<div id="html_e58c2d07e6f30047b94e4866277e5fb6" style="width: 100.0%; height: 100.0%;">Kalibr (SS-N-30A): 2500 km</div>`)[0];
+                popup_5847d4a50b9763854fa398c12eca6d27.setContent(html_e58c2d07e6f30047b94e4866277e5fb6);
+            
+        
+
+        circle_2db79154cc9490f4c7c414c082ac8f1c.bindPopup(popup_5847d4a50b9763854fa398c12eca6d27)
+        ;
+
+        
+    
+    
+            feature_group_43e3c871786490b306fa7947c1e147ba.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_ec17d953341cfe65b06ad3e6140bbb83 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_b7bd3576be05801ab41550c2aa7a36a5 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "cadetblue", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "cadetblue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_ec17d953341cfe65b06ad3e6140bbb83);
+        
+    
+        var popup_e4a920ca4cade957cbe3e7a270562fa3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b2c828754f0376575445ffb2a90d9f8c = $(`<div id="html_b2c828754f0376575445ffb2a90d9f8c" style="width: 100.0%; height: 100.0%;">9M729 (SSC-8): 2500 km</div>`)[0];
+                popup_e4a920ca4cade957cbe3e7a270562fa3.setContent(html_b2c828754f0376575445ffb2a90d9f8c);
+            
+        
+
+        circle_b7bd3576be05801ab41550c2aa7a36a5.bindPopup(popup_e4a920ca4cade957cbe3e7a270562fa3)
+        ;
+
+        
+    
+    
+            feature_group_ec17d953341cfe65b06ad3e6140bbb83.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_95e7d0951807ce4e107980b2e229fcc7 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_44efa3bdb3766ecf05a4a8e3bd602c11 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "lightred", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "lightred", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_95e7d0951807ce4e107980b2e229fcc7);
+        
+    
+        var popup_f9d89d48b201dac7d688b970b2c39617 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_99137b3468f4b8e2966d9f038e4db735 = $(`<div id="html_99137b3468f4b8e2966d9f038e4db735" style="width: 100.0%; height: 100.0%;">Kh-55 (AS-15 Kent): 2500 km</div>`)[0];
+                popup_f9d89d48b201dac7d688b970b2c39617.setContent(html_99137b3468f4b8e2966d9f038e4db735);
+            
+        
+
+        circle_44efa3bdb3766ecf05a4a8e3bd602c11.bindPopup(popup_f9d89d48b201dac7d688b970b2c39617)
+        ;
+
+        
+    
+    
+            feature_group_95e7d0951807ce4e107980b2e229fcc7.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_b35ce95783e13582fc851b2856542a06 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_9ee5d9a07bc2b15835fc8a70b7cb30f4 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "beige", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "beige", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2000000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_b35ce95783e13582fc851b2856542a06);
+        
+    
+        var popup_4b80122c85553465b5bb50cfd6be33c9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_cedee0070f7e2ccfe885563e31a24836 = $(`<div id="html_cedee0070f7e2ccfe885563e31a24836" style="width: 100.0%; height: 100.0%;">Kh-47M2 Kinzhal: 2000 km</div>`)[0];
+                popup_4b80122c85553465b5bb50cfd6be33c9.setContent(html_cedee0070f7e2ccfe885563e31a24836);
+            
+        
+
+        circle_9ee5d9a07bc2b15835fc8a70b7cb30f4.bindPopup(popup_4b80122c85553465b5bb50cfd6be33c9)
+        ;
+
+        
+    
+    
+            feature_group_b35ce95783e13582fc851b2856542a06.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_122c4a0be56bf010df970b73b8c2a8cb = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_12e1f922f644d8e1e508c869c3b0826f = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "lightgray", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "lightgray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 550000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_122c4a0be56bf010df970b73b8c2a8cb);
+        
+    
+        var popup_2d90fc185c227ad7cd688b066deefea6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4b6724112f40feb1826bf67cf36f0f1b = $(`<div id="html_4b6724112f40feb1826bf67cf36f0f1b" style="width: 100.0%; height: 100.0%;">R-11 (SS-1 Scud): 550 km</div>`)[0];
+                popup_2d90fc185c227ad7cd688b066deefea6.setContent(html_4b6724112f40feb1826bf67cf36f0f1b);
+            
+        
+
+        circle_12e1f922f644d8e1e508c869c3b0826f.bindPopup(popup_2d90fc185c227ad7cd688b066deefea6)
+        ;
+
+        
+    
+    
+            feature_group_122c4a0be56bf010df970b73b8c2a8cb.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_0fae467e6bd94ec45a9932ff7c6e283a = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_2f96cf69309615f433aba9b20b799282 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "darkpurple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "darkpurple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 500000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_0fae467e6bd94ec45a9932ff7c6e283a);
+        
+    
+        var popup_6895885ec1f969ffc8f5fd59e7afb20c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_238b5ad2ced7a0cbdf8da07340ddab25 = $(`<div id="html_238b5ad2ced7a0cbdf8da07340ddab25" style="width: 100.0%; height: 100.0%;">Iskander (SS-26 Stone): 500 km</div>`)[0];
+                popup_6895885ec1f969ffc8f5fd59e7afb20c.setContent(html_238b5ad2ced7a0cbdf8da07340ddab25);
+            
+        
+
+        circle_2f96cf69309615f433aba9b20b799282.bindPopup(popup_6895885ec1f969ffc8f5fd59e7afb20c)
+        ;
+
+        
+    
+    
+            feature_group_0fae467e6bd94ec45a9932ff7c6e283a.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_544fd31255d4adc35eac59315b188684 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_aab188ef76e7d89ad2daae440fdd40b5 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "lightblue", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "lightblue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 300000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_544fd31255d4adc35eac59315b188684);
+        
+    
+        var popup_d8ca3dccdbc751cff0baeb2cd87a6bd5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d91af22d965399281786106cc823b993 = $(`<div id="html_d91af22d965399281786106cc823b993" style="width: 100.0%; height: 100.0%;">3M-54 Kalibr/Club (SS-N-27 Sizzler): 300 km</div>`)[0];
+                popup_d8ca3dccdbc751cff0baeb2cd87a6bd5.setContent(html_d91af22d965399281786106cc823b993);
+            
+        
+
+        circle_aab188ef76e7d89ad2daae440fdd40b5.bindPopup(popup_d8ca3dccdbc751cff0baeb2cd87a6bd5)
+        ;
+
+        
+    
+    
+            feature_group_544fd31255d4adc35eac59315b188684.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_fbb4c412db78fd741b3f89b79a869852 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_86d0c3117ad4e9b53a4e618413b95b12 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "olive", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "olive", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 300000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_fbb4c412db78fd741b3f89b79a869852);
+        
+    
+        var popup_0e23a4180affeab4944ffbed6ff229ce = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_24dcff924badacc36119bd0c94ce41ab = $(`<div id="html_24dcff924badacc36119bd0c94ce41ab" style="width: 100.0%; height: 100.0%;">P-800 Oniks/Yakhont/Bastion (SS-N-26 “Strobile”): 300 km</div>`)[0];
+                popup_0e23a4180affeab4944ffbed6ff229ce.setContent(html_24dcff924badacc36119bd0c94ce41ab);
+            
+        
+
+        circle_86d0c3117ad4e9b53a4e618413b95b12.bindPopup(popup_0e23a4180affeab4944ffbed6ff229ce)
+        ;
+
+        
+    
+    
+            feature_group_fbb4c412db78fd741b3f89b79a869852.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var feature_group_bcffc88227184d04aa407cbbd8cbf97f = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_8877c5de08ce713bbcdefe9a0b3c0fa2 = L.circle(
+                [55.7558, 37.6173],
+                {"bubblingMouseEvents": true, "color": "maroon", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "maroon", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 120000, "stroke": true, "weight": 2}
+            ).addTo(feature_group_bcffc88227184d04aa407cbbd8cbf97f);
+        
+    
+        var popup_23a18764a849011ce73f882023f0a883 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2343ee75de5551a3faac00729a37ce45 = $(`<div id="html_2343ee75de5551a3faac00729a37ce45" style="width: 100.0%; height: 100.0%;">OTR-21 Tochka (SS-21 Scarab): 120 km</div>`)[0];
+                popup_23a18764a849011ce73f882023f0a883.setContent(html_2343ee75de5551a3faac00729a37ce45);
+            
+        
+
+        circle_8877c5de08ce713bbcdefe9a0b3c0fa2.bindPopup(popup_23a18764a849011ce73f882023f0a883)
+        ;
+
+        
+    
+    
+            feature_group_bcffc88227184d04aa407cbbd8cbf97f.addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+    
+            var layer_control_1e9deb4eeb8c081c351f22a30030cec1_layers = {
+                base_layers : {
+                    "Peta Dasar" : tile_layer_2f9a53b874544ce0b3fd6c215aec88c6,
+                },
+                overlays :  {
+                    "R-36 (SS-18 Satan) (16000 km)" : feature_group_8904e31bec26bb3b0eda7eda3e58dc3e,
+                    "Topol (SS-25 Sickle) (11000 km)" : feature_group_8675c165cf199068f4ecb16b2ee4c1a2,
+                    "Shtil (SS-N-23 Skiff) (11000 km)" : feature_group_d18be254bb4fb3e3ba47064f882bb050,
+                    "Topol-M (SS-27 Mod 1) (11000 km)" : feature_group_9c6b4379bf467b7634daa7cc6de0df00,
+                    "UR-100 (SS-19 Stiletto) (10000 km)" : feature_group_0f748342408902ef5fbfd7b19f5fe242,
+                    "RS-24 Yars (SS-27 Mod 2) (10500 km)" : feature_group_027ea361491135279a6ec3d02c436140,
+                    "RS-28 Sarmat (10000 km)" : feature_group_49aa3165a67a630e7bb146ad8331600c,
+                    "Bulava (SS-N-32) (8300 km)" : feature_group_ebb4b0f28a4823c674291801c175d0a2,
+                    "R-29 Vysota (SS-N-18 Stingray) (6500 km)" : feature_group_37a825edcae2315baf5350b0f7594354,
+                    "Avangard (6000 km)" : feature_group_7fcbc2f501b5baa30b7fbbe008b86483,
+                    "RS-26 Rubezh (5800 km)" : feature_group_45121f1ffba61b52eb9ffc39f2f11bb5,
+                    "Oreshnik (5470 km)" : feature_group_44982170c38a7f551a6e6a0d1165d5b1,
+                    "Pioneer (SS-20 Saber) (5000 km)" : feature_group_17d3db83d02195593a4b208ae402868a,
+                    "Zyb (SS-N-6 Serb) (3200 km)" : feature_group_4417cad8487a1c44050c74fadf0e3f10,
+                    "Granat (SS-N-21 Sampson) (3000 km)" : feature_group_5dbafb0290a4deab69ce6bf0ffd07fb0,
+                    "Kh-101 / Kh-102 (2800 km)" : feature_group_9b410f92c4dddf3430760ff8917decc6,
+                    "Kalibr (SS-N-30A) (2500 km)" : feature_group_43e3c871786490b306fa7947c1e147ba,
+                    "9M729 (SSC-8) (2500 km)" : feature_group_ec17d953341cfe65b06ad3e6140bbb83,
+                    "Kh-55 (AS-15 Kent) (2500 km)" : feature_group_95e7d0951807ce4e107980b2e229fcc7,
+                    "Kh-47M2 Kinzhal (2000 km)" : feature_group_b35ce95783e13582fc851b2856542a06,
+                    "R-11 (SS-1 Scud) (550 km)" : feature_group_122c4a0be56bf010df970b73b8c2a8cb,
+                    "Iskander (SS-26 Stone) (500 km)" : feature_group_0fae467e6bd94ec45a9932ff7c6e283a,
+                    "3M-54 Kalibr/Club (SS-N-27 Sizzler) (300 km)" : feature_group_544fd31255d4adc35eac59315b188684,
+                    "P-800 Oniks/Yakhont/Bastion (SS-N-26 \u201cStrobile\u201d) (300 km)" : feature_group_fbb4c412db78fd741b3f89b79a869852,
+                    "OTR-21 Tochka (SS-21 Scarab) (120 km)" : feature_group_bcffc88227184d04aa407cbbd8cbf97f,
+                },
+            };
+            let layer_control_1e9deb4eeb8c081c351f22a30030cec1 = L.control.layers(
+                layer_control_1e9deb4eeb8c081c351f22a30030cec1_layers.base_layers,
+                layer_control_1e9deb4eeb8c081c351f22a30030cec1_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_703b8a99891f3e412f2b1272784bcde6);
+
+        
+    
+            L.control.fullscreen(
+                {
+  "position": "topleft",
+  "title": "Full Screen",
+  "titleCancel": "Exit Full Screen",
+  "forceSeparateButton": false,
+}
+            ).addTo(map_703b8a99891f3e412f2b1272784bcde6);
+        
+</script>
+</html>
+    </div>
+    <div class="footer">
+        <div class="sumber">Sumber: CSIS Missile Defense Project</div>
+        <div class="kredit">Visualisasi Oleh: Ridha Kusuma Perdana</div>
+    </div>
+</body>
+</html>
